@@ -1,5 +1,7 @@
 # Theme Switcher
 
+Hot swap themes by "playing" a theme as if it was a game rom. Includes retroarch theme (but doesn't select it) and boot logo if they're provided in the theme.
+
 ## Setup
 
 - TF1 Card
