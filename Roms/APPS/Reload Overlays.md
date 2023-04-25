@@ -7,7 +7,7 @@ Automation to help you swap overlays by "playing" an overlay as if it was a game
 This works for 1 or 2 SD CARD setups and edits the coremapping.json for you make it all work.
 
 - Copy any overlay pngs you want into `Roms\0VERLAY\overlays` (make that folder if you need to)
-- Copy `Reload Overlays.sh` file from this repo into `Roms/APPS` (make the `APPS` folder if it doesn't exist)
+- Copy [Reload Overlays.sh](Reload%20Overlays.sh) into `Roms/APPS` (make the `APPS` folder if it doesn't exist)
 - Boot your device, go to Consoles > APPS (the picture of a terminal) > open "Reload Overlays"
   - If all went well, you should get 3 ascending vibrations
   - If it failed, you'll get 2 descending vibrations
