@@ -2,6 +2,16 @@
 
 Automation to help you swap overlays by "playing" an overlay as if it was a game rom.
 
+## Note
+
+As mentioned in the [original creators readme](https://www.reddit.com/r/RG35XX/comments/124ifth/comment/jdzdns3).
+
+> Press Menu+Select in game to bring the overlay
+>
+>Retroarch settings >> on screen display >> allow the on screen notifications >> Change font size to 1 Then FPS display will be invisible.
+>
+>It’s not real overlay feature. It just use commands to replace the notification-overlay.png. Most overlays came from Miyoo stock os.
+
 ## Setup
 
 This works for 1 or 2 SD CARD setups and edits the coremapping.json for you make it all work.
