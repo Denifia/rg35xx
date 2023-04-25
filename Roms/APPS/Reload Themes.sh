@@ -52,7 +52,7 @@ generate_themes() {
       for folder in skin font lang rgui
       do
           if [ -d "$dir/$folder" ]; then
-              echo "cp -rv \"\$SRC/\$THEME/skin\" \"\$LOC\"" >> "$themesh"
+              echo "cp -rv \"\$SRC/\$THEME/$folder\" \"\$LOC\"" >> "$themesh"
           fi
       done
 
