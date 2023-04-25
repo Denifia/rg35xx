@@ -4,9 +4,9 @@ TF1=/mnt/mmc
 TF2=/mnt/SDCARD
 
 setup() {
-  if [ ! -n "$(busybox sed -n '/"THEMES": "\/bin\/sh"/p' /mnt/mmc/CFW/config/coremapping.json)" ]; then
+  if [ ! -n "$(busybox sed -n '/"THEMES": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]; then
     # coremapping.json dosen't have a mapping for themes
-    busybox sed -i '/}/ i\ /"THEMES": "\/bin\/sh"' /mnt/mmc/CFW/config/coremapping.json
+    busybox sed -i '/}/ i\ /"THEMES": "\/bin\/sh",' /mnt/mmc/CFW/config/coremapping.json
   fi 
 
   if [ ! -d "$1/Themes" ]; then
