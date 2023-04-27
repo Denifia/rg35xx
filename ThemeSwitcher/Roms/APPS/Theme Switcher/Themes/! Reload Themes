@@ -34,10 +34,10 @@ generate_themes() {
           fi
       done
 
-      if [ -f "$dir/boot_logo.bmp.gz" ]; then
-          echo "cp -v \"$THEMESDIR/$themename/boot_logo.bmp.gz\" \"/mnt/mmc/CFW\"" >> "$themesh"
-          # todo - remount something?
-      fi
+      # if [ -f "$dir/boot_logo.bmp.gz" ]; then
+      #     echo "cp -v \"$THEMESDIR/$themename/boot_logo.bmp.gz\" \"/mnt/mmc/CFW\"" >> "$themesh"
+      #     # todo - remount something?
+      # fi
     fi
   done
 }
