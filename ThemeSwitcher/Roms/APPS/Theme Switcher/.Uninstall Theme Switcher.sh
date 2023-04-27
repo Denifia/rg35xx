@@ -6,7 +6,7 @@ if [ -n "$(busybox sed -n '/        "Themes": "\/bin\/sh",/p' /mnt/mmc/CFW/confi
   busybox sed -i '/        "Themes": "\/bin\/sh",/d' /mnt/mmc/CFW/config/coremapping.json
 fi
 
-AppsDir=$(dirname "$0")
+AppsDir=$(busybox dirname "$0")
 
 # Delete this uninstaller file
 rm "$AppsDir/Uninstall Theme Switcher.sh"
