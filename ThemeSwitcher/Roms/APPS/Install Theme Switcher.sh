@@ -10,7 +10,7 @@ AppsDir=$(busybox dirname "$0")
 AppName="Theme Switcher"
 
 # Copy over the Themes directory to the correct path
-mv "$AppsDir/$AppName/Themes" "$(busybox dirname $(busybox dirname $AppsDir))/"
+mv "$AppsDir/$AppName/Themes" "$(busybox dirname $(busybox dirname $AppsDir))"
 
 # Rename the uninstaller so it shows up in APPS
 mv "$AppsDir/$AppName/.Uninstall Theme Switcher.sh" "$AppsDir/Uninstall Theme Switcher.sh"

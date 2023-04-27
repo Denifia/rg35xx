@@ -25,7 +25,20 @@ generate_themes() {
       themesh="$THEMESDIR/$themename.sh"
 
       # pipe commands into new script file
-      echo "#!/bin/sh" > "$themesh"
+      echo "#!/bin/sh
+
+for folder in skin font lang
+do
+    if [ -d \"/mnt/mmc/CFW/\$folder\" ]; then
+
+        # delete everything in this theme related folder
+        rm -r \"/mnt/mmc/CFW/\$folder/*\"
+
+        # copy in the default files from garlic os
+        cp -r \"$THEMESDIR/.garlicos/\$folder\" \"/mnt/mmc/CFW\"
+    fi
+done
+      " > "$themesh"
 
       for folder in skin font lang rgui
       do
@@ -34,10 +47,18 @@ generate_themes() {
           fi
       done
 
+      # Add back in later after more testing
       # if [ -f "$dir/boot_logo.bmp.gz" ]; then
       #     echo "cp -v \"$THEMESDIR/$themename/boot_logo.bmp.gz\" \"/mnt/mmc/CFW\"" >> "$themesh"
       #     # todo - remount something?
       # fi
+
+      echo "
+echo 50 > "/sys/class/power_supply/battery/moto"
+busybox sleep 0.2
+echo 0 > "/sys/class/power_supply/battery/moto"
+      " > "$themesh"
+
     fi
   done
 }
