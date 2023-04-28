@@ -9,14 +9,16 @@ fi
 AppsDir=$(busybox dirname "$0")
 AppName="Theme Switcher"
 
+# todo - check if /Themes exist and if it does, rename to /Themes_backup, do the normal stuff we do, then copy all content from /Themes_backup to /Themes
+
 # Copy over the Themes directory to the correct path
 mv "$AppsDir/$AppName/Themes" "$(busybox dirname $(busybox dirname $AppsDir))"
 
 # Rename the uninstaller so it shows up in APPS
-mv "$AppsDir/$AppName/.Uninstall Theme Switcher.sh" "$AppsDir/Uninstall Theme Switcher.sh"
+mv "$AppsDir/$AppName/.$AppName - Uninstall.sh" "$AppsDir/$AppName - Uninstall.sh"
 
 # Delete this installer file
-rm "$AppsDir/Install Theme Switcher.sh"
+rm "$AppsDir/$AppName - Install.sh"
 
 # Delete the install dir
 rm -r "$AppsDir/$AppName"

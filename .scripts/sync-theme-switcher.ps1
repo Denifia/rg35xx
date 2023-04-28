@@ -1,0 +1,1 @@
+adb push --sync ".\ThemeSwitcher\Roms\APPS" "/mnt/SDCARD/Roms"

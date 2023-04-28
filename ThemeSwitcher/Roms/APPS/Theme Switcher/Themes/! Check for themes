@@ -1,6 +1,6 @@
 #!/bin/bash
 
-THEMESDIR=$(dirname "$0")
+THEMESDIR=$(busybox dirname "$0")
 
 clear_all_themes() {
   # Delete all the existing theme "roms"
@@ -11,21 +11,29 @@ clear_all_themes() {
   done
 }
 
+noFolders=0
 generate_themes() {
-  # Loop through all directories in SRC
-  for dir in $THEMESDIR/*; do
-    
-    # Check if the current directory is a directory (not a file)
-    if [ -d "$dir" ]; then
-      
-      # Get the directory name
-      themename="$(busybox basename "$dir")"
-      
-      # Create a new file in DEST with the same name as the directory
-      themesh="$THEMESDIR/$themename.sh"
+  for dir in "$THEMESDIR"/*/; do
 
-      # pipe commands into new script file
-      echo "#!/bin/sh
+    if [ "$dir" == "$THEMESDIR/*/" ]; then
+      # no folders found
+      noFolders=1
+      continue
+    fi
+
+    if [ "$dir" == */.* ]; then
+      # exclude "hidden" . folders
+      continue
+    fi
+
+    # Get the directory name
+    themename=$(busybox basename "$dir")
+    
+    # Create a new file in DEST with the same name as the directory
+    themesh="$THEMESDIR/$themename.sh"
+
+    # pipe commands into new script file
+    echo "#!/bin/sh
 
 for folder in skin font lang
 do
@@ -38,28 +46,25 @@ do
         cp -r \"$THEMESDIR/.garlicos/\$folder\" \"/mnt/mmc/CFW\"
     fi
 done
-      " > "$themesh"
+    " > "$themesh"
 
-      for folder in skin font lang rgui
-      do
-          if [ -d "$dir/$folder" ]; then
-              echo "cp -rv \"$THEMESDIR/$themename/$folder\" \"/mnt/mmc/CFW\"" >> "$themesh"
-          fi
-      done
+    for folder in skin font lang rgui; do
+        if [ -d "$dir/$folder" ]; then
+            echo "cp -rv \"$THEMESDIR/$themename/$folder\" \"/mnt/mmc/CFW\"" >> "$themesh"
+        fi
+    done
 
-      # Add back in later after more testing
-      # if [ -f "$dir/boot_logo.bmp.gz" ]; then
-      #     echo "cp -v \"$THEMESDIR/$themename/boot_logo.bmp.gz\" \"/mnt/mmc/CFW\"" >> "$themesh"
-      #     # todo - remount something?
-      # fi
+    # Add back in later after more testing
+    # if [ -f "$dir/boot_logo.bmp.gz" ]; then
+    #     echo "cp -v \"$THEMESDIR/$themename/boot_logo.bmp.gz\" \"/mnt/mmc/CFW\"" >> "$themesh"
+    #     # todo - remount something?
+    # fi
 
-      echo "
+    echo "
 echo 50 > "/sys/class/power_supply/battery/moto"
 busybox sleep 0.2
 echo 0 > "/sys/class/power_supply/battery/moto"
-      " > "$themesh"
-
-    fi
+    " >> "$themesh"
   done
 }
 
@@ -89,4 +94,9 @@ rumble_fail() {
 
 clear_all_themes
 generate_themes
-rumble_success
+
+if [ $noFolders == 1 ]; then
+  rumble_fail
+else
+  rumble_success
+fi

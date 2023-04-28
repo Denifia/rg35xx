@@ -7,9 +7,16 @@ if [ -n "$(busybox sed -n '/        "Themes": "\/bin\/sh",/p' /mnt/mmc/CFW/confi
 fi
 
 AppsDir=$(busybox dirname "$0")
+AppName="Theme Switcher"
+ThemesDir="$(busybox dirname $(busybox dirname $AppsDir))/Themes"
 
 # Delete this uninstaller file
-rm "$AppsDir/Uninstall Theme Switcher.sh"
+rm "$AppsDir/$AppName - Uninstall.sh"
+
+# remove the files we put into /Themes but leave everything else
+rm -r "$ThemesDir/.garlicos"
+rm "$ThemesDir/.README.md"
+rm "$ThemesDir/! Check for themes"
 
 # Rumble success
 echo 50 > "/sys/class/power_supply/battery/moto"
