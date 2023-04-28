@@ -31,6 +31,7 @@ generate_themes() {
     
     # Create a new file in DEST with the same name as the directory
     themesh="$THEMESDIR/$themename.sh"
+    # bootlogosh="$THEMESDIR/$themename - boot logo.sh"
 
     # pipe commands into new script file
     echo "#!/bin/sh
@@ -54,11 +55,11 @@ done
         fi
     done
 
-    # Add back in later after more testing
-    # if [ -f "$dir/boot_logo.bmp.gz" ]; then
-    #     echo "cp -v \"$THEMESDIR/$themename/boot_logo.bmp.gz\" \"/mnt/mmc/CFW\"" >> "$themesh"
-    #     # todo - remount something?
-    # fi
+#     if [ -f "$dir/boot_logo.bmp.gz" ]; then
+#         echo "#!/bin/sh
+# cp -f \"$THEMESDIR/.garlicos/boot_logo.bmp.gz\" \"/mnt/mmc/CFW/boot_logo.bmp.gz\"
+# cp -v \"$THEMESDIR/$themename/boot_logo.bmp.gz\" \"/mnt/mmc/CFW\"" > "$bootlogosh"
+#     fi
 
     echo "
 echo 50 > "/sys/class/power_supply/battery/moto"
@@ -66,6 +67,27 @@ busybox sleep 0.2
 echo 0 > "/sys/class/power_supply/battery/moto"
     " >> "$themesh"
   done
+}
+
+add_default_theme() {
+  echo "#!/bin/sh
+
+for folder in skin font lang
+do
+    if [ -d \"/mnt/mmc/CFW/\$folder\" ]; then
+
+        # delete everything in this theme related folder
+        rm -r \"/mnt/mmc/CFW/\$folder/*\"
+
+        # copy in the default files from garlic os
+        cp -r \"$THEMESDIR/.garlicos/\$folder\" \"/mnt/mmc/CFW\"
+    fi
+done
+
+echo 50 > "/sys/class/power_supply/battery/moto"
+busybox sleep 0.2
+echo 0 > "/sys/class/power_supply/battery/moto"
+    " > "$THEMESDIR/Garlic OS Default.sh"
 }
 
 rumble_success() {
@@ -94,6 +116,7 @@ rumble_fail() {
 
 clear_all_themes
 generate_themes
+add_default_theme
 
 if [ $noFolders == 1 ]; then
   rumble_fail

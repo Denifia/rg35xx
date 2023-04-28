@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if coremappings.json includes '"Themes": "/bin/sh",'
-if [ ! -n "$(busybox sed -n '/        "Themes": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]; then
+if [[ ! -n "$(busybox sed -n '/        "Themes": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]]; then
   # it was missing so we add it
   busybox sed -i '/{/ a\        "Themes": "\/bin\/sh",' /mnt/mmc/CFW/config/coremapping.json
 fi
@@ -11,11 +11,13 @@ AppName="Theme Switcher"
 
 # todo - check if /Themes exist and if it does, rename to /Themes_backup, do the normal stuff we do, then copy all content from /Themes_backup to /Themes
 
-# Copy over the Themes directory to the correct path
-mv "$AppsDir/$AppName/Themes" "$(busybox dirname $(busybox dirname $AppsDir))"
-
 # Rename the uninstaller so it shows up in APPS
 mv "$AppsDir/$AppName/.$AppName - Uninstall.sh" "$AppsDir/$AppName - Uninstall.sh"
+
+# Copy over the Themes directory to the correct path
+RootDir="$(busybox dirname $(busybox dirname $AppsDir))"
+mkdir -p "$RootDir/Themes"
+cp -r "$AppsDir/$AppName/Themes" "$RootDir"
 
 # Delete this installer file
 rm "$AppsDir/$AppName - Install.sh"
