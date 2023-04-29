@@ -1,0 +1,5 @@
+1. Copy everything here into your /Roms/APPS folder on the SDCARD you use to store your roms (feel free to delete this readme)
+2. Run the "Theme Switcher - Install" app on your device
+3. Copy themes you like into /Themes (will be next to your /Roms folder)
+4. Run "! Check for themes" in your new "Themes" tile
+5. Run the theme you want to switch too
