@@ -14,13 +14,23 @@ AppName="Theme Switcher"
 # Rename the uninstaller so it shows up in APPS
 mv "$AppsDir/$AppName/.$AppName - Uninstall.sh" "$AppsDir/$AppName - Uninstall.sh"
 
-# Copy over the Themes directory to the correct path
+RomsDir="$(busybox dirname $AppsDir)"
+
+# Check for the old /Themes folder in the root of the SDCARD and migrate to new setup
 RootDir="$(busybox dirname $(busybox dirname $AppsDir))"
-mkdir -p "$RootDir/Themes"
-cp -r "$AppsDir/$AppName/Themes" "$RootDir"
+if [ -d "$RootDir/Themes" ]; then
+  mv "$RootDir/Themes" $RomsDir
+fi
+
+# Copy over the Themes directory to the correct path
+mkdir -p "$RomsDir/Themes"
+cp -r "$AppsDir/$AppName/Themes" "$RomsDir"
 
 # Delete this installer file
 rm "$AppsDir/$AppName - Install.sh"
+
+# Delete this apps readme
+rm "$AppsDir/.$AppName.txt"
 
 # Delete the install dir
 rm -r "$AppsDir/$AppName"

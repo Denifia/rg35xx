@@ -8,7 +8,7 @@ fi
 
 AppsDir=$(busybox dirname "$0")
 AppName="Theme Switcher"
-ThemesDir="$(busybox dirname $(busybox dirname $AppsDir))/Themes"
+ThemesDir="$(busybox dirname $AppsDir)/Themes"
 
 # Delete this uninstaller file
 rm "$AppsDir/$AppName - Uninstall.sh"
@@ -17,6 +17,8 @@ rm "$AppsDir/$AppName - Uninstall.sh"
 rm -r "$ThemesDir/.garlicos"
 rm "$ThemesDir/.README.md"
 rm "$ThemesDir/! Check for themes"
+rm $ThemesDir/*.sh
+rm -r $ThemesDir/Imgs
 
 # Rumble success
 echo 50 > "/sys/class/power_supply/battery/moto"

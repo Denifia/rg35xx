@@ -2,6 +2,16 @@
 
 THEMESDIR=$(busybox dirname "$0")
 
+# Create the image preview folder if it doesn't exit
+mkdir -p "$THEMESDIR/Imgs"
+THEMESIMGSDIR="$THEMESDIR/Imgs"
+
+RUMBLE="
+echo 50 > \"/sys/class/power_supply/battery/moto\"
+busybox sleep 0.2
+echo 0 > \"/sys/class/power_supply/battery/moto\"
+"
+
 clear_all_themes() {
   # Delete all the existing theme "roms"
   for themefile in $THEMESDIR/*.sh; do
@@ -9,6 +19,9 @@ clear_all_themes() {
       rm "$themefile"
     fi
   done
+
+  # Clear any old previews
+  rm "$THEMESIMGSDIR/Imgs/*"
 }
 
 noFolders=0
@@ -29,60 +42,93 @@ generate_themes() {
     # Get the directory name
     themename=$(busybox basename "$dir")
     
-    # Create a new file in DEST with the same name as the directory
-    themesh="$THEMESDIR/$themename.sh"
-    bootlogosh="$THEMESDIR/$themename - boot logo.sh"
-    iconssh="$THEMESDIR/$themename - icons only.sh"
+    # Setup the output script names
+    themesuffix=" - theme"
+    themesh="$THEMESDIR/$themename$themesuffix.sh"
+    bootlogosuffix=" - boot logo"
+    bootlogosh="$THEMESDIR/$themename$bootlogosuffix.sh"
+    iconsuffix=" - system icons"
+    iconssh="$THEMESDIR/$themename$iconsuffix.sh"
 
-    # pipe commands into new script file
-    echo "#!/bin/sh
+    # If this folder has theme elements
+    if [ -d "$dir/skin" ] || [ -d "$dir/font" ] || [ -d "$dir/lang" ]; then
 
-for folder in skin font lang
-do
-    if [ -d \"/mnt/mmc/CFW/\$folder\" ]; then
-
-        # delete everything in this theme related folder
-        rm -r \"/mnt/mmc/CFW/\$folder/*\"
-
-        # copy in the default files from garlic os
-        cp -r \"$THEMESDIR/.garlicos/\$folder\" \"/mnt/mmc/CFW\"
-    fi
-done
-    " > "$themesh"
-
-    for folder in skin font lang rgui; do
-        if [ -d "$dir/$folder" ]; then
-            echo "cp -rv \"$THEMESDIR/$themename/$folder\" \"/mnt/mmc/CFW\"" >> "$themesh"
-        fi
-    done
-
-    if [ -d "$dir/skin/system" ]; then
+      # Delete skin, font and lang folders, replace with garlic os defaults
       echo "#!/bin/sh
-cp -rv \"$THEMESDIR/$themename/skin/system\" \"/mnt/mmc/CFW/skin\"
+      for folder in skin font lang
+      do
+        if [ -d \"/mnt/mmc/CFW/\$folder\" ]; then
 
-echo 50 > \"/sys/class/power_supply/battery/moto\"
-busybox sleep 0.2
-echo 0 > \"/sys/class/power_supply/battery/moto\"
-      " > "$iconssh"
+          # delete everything in this theme related folder
+          rm -r \"/mnt/mmc/CFW/\$folder/*\"
+
+          # copy in the default files from garlic os
+          cp -r \"$THEMESDIR/.garlicos/\$folder\" \"/mnt/mmc/CFW\"
+        fi
+      done
+      " > "$themesh"
+
+      # For each part of the theme, add a copy action
+      # Note the inclusion of rgui folder
+      for folder in skin font lang rgui; do
+        if [ -d "$dir/$folder" ]; then
+          echo "cp -rv \"$THEMESDIR/$themename/$folder\" \"/mnt/mmc/CFW\"" >> "$themesh"
+        fi
+      done
+
+      echo "$RUMBLE" >> "$themesh"
+
+      # If the theme has an icon set, pull it out to it's own script
+      if [ -d "$dir/skin/system" ]; then
+        echo "#!/bin/sh
+        cp -rv \"$THEMESDIR/$themename/skin/system\" \"/mnt/mmc/CFW/skin\"
+        $RUMBLE" > "$iconssh"
+      fi
+
+      # copy the preview if it exists
+      if [ -f "$dir/Imgs/$themename.png" ]; then
+        cp "$dir/Imgs/$themename.png" "$THEMESIMGSDIR/$themename$themesuffix.png"
+      fi
+
+      if [ -d "$dir/imgs" ]; then
+        cp "$dir/imgs/$themename.png" "$THEMESIMGSDIR/$themename$themesuffix.png"
+      fi
     fi
 
+    # If the folder has a boot logo, pull it out to it's own script
     if [ -f "$dir/misc/boot_logo.bmp.gz" ]; then
       echo "#!/bin/sh
-mount -o remount,rw /misc
-cp -r \"$THEMESDIR/$themename/misc/boot_logo.bmp.gz\" \"/misc/boot_logo.bmp.gz\"
-mount -o remount,ro /misc
+      mount -o remount,rw /misc
+      cp -r \"$THEMESDIR/$themename/misc/boot_logo.bmp.gz\" \"/misc/boot_logo.bmp.gz\"
+      mount -o remount,ro /misc
+      $RUMBLE" > "$bootlogosh"
 
-echo 50 > \"/sys/class/power_supply/battery/moto\"
-busybox sleep 0.2
-echo 0 > \"/sys/class/power_supply/battery/moto\"
-      " > "$bootlogosh"
+      # copy the preview if it exists
+      if [ -f "$dir/Imgs/$themename.png" ]; then
+        cp "$dir/Imgs/$themename.png" "$THEMESIMGSDIR/$themename$logosuffix.png"
+      fi
+
+      if [ -d "$dir/imgs" ]; then
+        cp "$dir/imgs/$themename.png" "$THEMESIMGSDIR/$themename$logosuffix.png"
+      fi
     fi
 
-    echo "
-echo 50 > \"/sys/class/power_supply/battery/moto\"
-busybox sleep 0.2
-echo 0 > \"/sys/class/power_supply/battery/moto\"
-    " >> "$themesh"
+    # If this folder is actually an icon set, make it into it's own script
+    if [ -d "$dir/system" ]; then
+      echo "#!/bin/sh
+      cp -rv \"$THEMESDIR/$themename/system\" \"/mnt/mmc/CFW/skin\"
+      $RUMBLE" > "$iconssh"
+
+      # copy the preview if it exists
+      if [ -f "$dir/Imgs/$themename.png" ]; then
+        cp "$dir/Imgs/$themename.png" "$THEMESIMGSDIR/$themename$iconsuffix.png"
+      fi
+
+      if [ -d "$dir/imgs" ]; then
+        cp "$dir/imgs/$themename.png" "$THEMESIMGSDIR/$themename$iconsuffix.png"
+      fi
+    fi
+
   done
 }
 
@@ -98,10 +144,7 @@ do
   cp -r \"$THEMESDIR/.garlicos/\$folder\" \"/mnt/mmc/CFW\"
 done
 
-echo 50 > \"/sys/class/power_supply/battery/moto\"
-busybox sleep 0.2
-echo 0 > \"/sys/class/power_supply/battery/moto\"
-    " > "$THEMESDIR/Garlic OS Default.sh"
+$RUMBLE" > "$THEMESDIR/Garlic OS - theme.sh"
 
     echo "#!/bin/sh
 # copy in the default files from garlic os
@@ -109,10 +152,7 @@ mount -o remount,rw /misc
 cp -r \"$THEMESDIR/.garlicos/misc/boot_logo.bmp.gz\" \"/misc/boot_logo.bmp.gz\"
 mount -o remount,ro /misc
 
-echo 50 > \"/sys/class/power_supply/battery/moto\"
-busybox sleep 0.2
-echo 0 > \"/sys/class/power_supply/battery/moto\"
-    " > "$THEMESDIR/Garlic OS Default - boot logo.sh"
+$RUMBLE" > "$THEMESDIR/Garlic OS - boot logo.sh"
 }
 
 rumble_success() {
