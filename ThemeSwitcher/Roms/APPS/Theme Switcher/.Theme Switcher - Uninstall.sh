@@ -1,24 +1,20 @@
 #!/bin/bash
 
-# Check if coremappings.json includes '        "Themes": "/bin/sh",'
-if [ -n "$(busybox sed -n '/        "Themes": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]; then
+# Check if coremappings.json includes '        "Skins": "/bin/sh",'
+if [ -n "$(busybox sed -n '/        "Skins": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]; then
   # it was there so we remove it
-  busybox sed -i '/        "Themes": "\/bin\/sh",/d' /mnt/mmc/CFW/config/coremapping.json
+  busybox sed -i '/        "Skins": "\/bin\/sh",/d' /mnt/mmc/CFW/config/coremapping.json
 fi
 
 AppsDir=$(busybox dirname "$0")
 AppName="Theme Switcher"
-ThemesDir="$(busybox dirname $AppsDir)/Themes"
+SkinsDir="$(busybox dirname $AppsDir)/Skins"ß
 
 # Delete this uninstaller file
 rm "$AppsDir/$AppName - Uninstall.sh"
 
-# remove the files we put into /Themes but leave everything else
-rm -r "$ThemesDir/.garlicos"
-rm "$ThemesDir/.README.md"
-rm "$ThemesDir/! Check for themes"
-rm $ThemesDir/*.sh
-rm -r $ThemesDir/Imgs
+# remove /Roms/Skins because we made it
+rm -r "$SkinsDir""
 
 # Rumble success
 echo 50 > "/sys/class/power_supply/battery/moto"

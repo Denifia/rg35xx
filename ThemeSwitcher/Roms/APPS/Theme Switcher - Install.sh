@@ -1,30 +1,46 @@
 #!/bin/bash
 
-# Check if coremappings.json includes '"Themes": "/bin/sh",'
-if [[ ! -n "$(busybox sed -n '/        "Themes": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]]; then
+# Check if coremappings.json includes '"Skins": "/bin/sh",'
+if [[ ! -n "$(busybox sed -n '/        "Skins": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]]; then
   # it was missing so we add it
-  busybox sed -i '/{/ a\        "Themes": "\/bin\/sh",' /mnt/mmc/CFW/config/coremapping.json
+  busybox sed -i '/{/ a\        "Skins": "\/bin\/sh",' /mnt/mmc/CFW/config/coremapping.json
 fi
 
 AppsDir=$(busybox dirname "$0")
 AppName="Theme Switcher"
-
-# todo - check if /Themes exist and if it does, rename to /Themes_backup, do the normal stuff we do, then copy all content from /Themes_backup to /Themes
+RomsDir="$(busybox dirname $AppsDir)"
+RootDir="$(busybox dirname $RomsDir)"
 
 # Rename the uninstaller so it shows up in APPS
 mv "$AppsDir/$AppName/.$AppName - Uninstall.sh" "$AppsDir/$AppName - Uninstall.sh"
 
-RomsDir="$(busybox dirname $AppsDir)"
+cleanup_old_versions() {
+  # cleanup from previous versions of Theme Switcher
+  if [ -n "$(busybox sed -n '/        "Themes": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]; then
+    # it was there so we remove it
+    busybox sed -i '/        "Themes": "\/bin\/sh",/d' /mnt/mmc/CFW/config/coremapping.json
+  fi
 
-# Check for the old /Themes folder in the root of the SDCARD and migrate to new setup
-RootDir="$(busybox dirname $(busybox dirname $AppsDir))"
-if [ -d "$RootDir/Themes" ]; then
-  mv "$RootDir/Themes" $RomsDir
-fi
+  if [ -d "$RootDir/Themes/.garlicos" ]; then
+    ThemesDir="$RootDir/Themes"
+    rm -r "$ThemesDir/.garlicos"
+    rm "$ThemesDir/.README.md"
+    rm "$ThemesDir/! Check for themes"
+    rm $ThemesDir/*.sh
+    rm -r $ThemesDir/Imgs
+  fi
+}
 
-# Copy over the Themes directory to the correct path
-mkdir -p "$RomsDir/Themes"
-cp -r "$AppsDir/$AppName/Themes" "$RomsDir"
+cleanup_old_versions
+
+# Make folders for everything
+mkdir -p "$RootDir/Themes"
+mkdir -p "$RootDir/BootLogos"
+mkdir -p "$RootDir/SystemIcons"
+
+# Copy over the Skins directory to the correct path
+mkdir -p "$RomsDir/Skins"
+cp -r "$AppsDir/$AppName/Skins" "$RomsDir"
 
 # Delete this installer file
 rm "$AppsDir/$AppName - Install.sh"
