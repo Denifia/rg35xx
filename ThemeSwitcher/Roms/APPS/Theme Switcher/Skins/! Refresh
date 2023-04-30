@@ -192,7 +192,6 @@ generate_systemicons() {
       $skinsDir/.utils/printstr \"    Switching system icons...   \" & sleep 1
 
       cp -rv \"$rootSystemIconsDir/$themeName/system\" \"/mnt/mmc/CFW/skin\" $rumble" > "$iconsSh"
-      $rumble" > "$iconsSh"
 
       # copy the preview if it exists
       if [ -f "$dir/Imgs/$themeName.png" ]; then
