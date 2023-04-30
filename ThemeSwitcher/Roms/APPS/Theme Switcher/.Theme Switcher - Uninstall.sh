@@ -8,13 +8,15 @@ fi
 
 AppsDir=$(busybox dirname "$0")
 AppName="Theme Switcher"
-SkinsDir="$(busybox dirname $AppsDir)/Skins"ß
+SkinsDir="$(busybox dirname $AppsDir)/Skins"
+
+$SkinsDir/.utils/printstr "    Uninstalling...   " & sleep 1
 
 # Delete this uninstaller file
 rm "$AppsDir/$AppName - Uninstall.sh"
 
 # remove /Roms/Skins because we made it
-rm -r "$SkinsDir""
+rm -r "$SkinsDir"
 
 # Rumble success
 echo 50 > "/sys/class/power_supply/battery/moto"
