@@ -11,6 +11,8 @@ AppName="Theme Switcher"
 RomsDir="$(busybox dirname $AppsDir)"
 RootDir="$(busybox dirname $RomsDir)"
 
+$AppsDir/Theme\ Switcher/Skins/.utils/printstr "    Installing...   " & sleep 1
+
 # Rename the uninstaller so it shows up in APPS
 mv "$AppsDir/$AppName/.$AppName - Uninstall.sh" "$AppsDir/$AppName - Uninstall.sh"
 
@@ -25,7 +27,7 @@ cleanup_old_versions() {
     ThemesDir="$RootDir/Themes"
     rm -r "$ThemesDir/.garlicos"
     rm "$ThemesDir/.README.md"
-    rm "$ThemesDir/! Check for themes"
+    rm "$ThemesDir/! Refresh"
     rm $ThemesDir/*.sh
     rm -r $ThemesDir/Imgs
   fi
