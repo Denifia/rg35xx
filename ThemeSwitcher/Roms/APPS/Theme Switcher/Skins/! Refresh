@@ -183,7 +183,7 @@ generate_systemicons() {
     themeName=$(busybox basename "$dir")
     
     # Setup the output script names
-    systemiconsh="$skinsDir/$themeName$iconSuffix.sh"
+    iconsSh="$skinsDir/$themeName$iconSuffix.sh"
 
     # If this folder is actually an icon set, make it into it's own script
     if [ -d "$dir/system" ]; then
@@ -191,7 +191,7 @@ generate_systemicons() {
 
       $skinsDir/.utils/printstr \"    Switching system icons...   \" & sleep 1
 
-      cp -rv \"$rootThemesDir/$themeName/system\" \"/mnt/mmc/CFW/skin\"
+      cp -rv \"$rootSystemIconsDir/$themeName/system\" \"/mnt/mmc/CFW/skin\" $rumble" > "$iconsSh"
       $rumble" > "$iconsSh"
 
       # copy the preview if it exists
