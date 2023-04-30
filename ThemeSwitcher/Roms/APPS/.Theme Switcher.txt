@@ -1,5 +1,7 @@
 1. Copy everything here into your /Roms/APPS folder on the SDCARD you use to store your roms
 2. Run the "Theme Switcher - Install" app on your device
 3. Copy themes you like into /Themes (will be next to your /Roms folder)
-4. Run "! Check for themes" in your new "Themes" tile
-5. Run the theme you want to switch too
+4. Copy boot logos you like into /BootLogos (will be next to your /Roms folder)
+5. Copy system icons you like into /SystemIcons (will be next to your /Roms folder)
+4. Run "! Refresh" in your new "Skins" tile
+5. Start switching it up 🎉
