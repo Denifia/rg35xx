@@ -10,10 +10,12 @@ AppsDir=$(busybox dirname "$0")
 AppName="Theme Switcher"
 SkinsDir="$(busybox dirname $AppsDir)/Skins"
 
-$SkinsDir/.utils/printstr "    Uninstalling...   " & sleep 1
+$SkinsDir/.utils/printstr "    Uninstalling...    " & sleep 1
 
 # Delete this uninstaller file
 rm "$AppsDir/$AppName - Uninstall.sh"
+rm "$AppsDir/$AppName - Hide.sh"
+rm "$AppsDir/$AppName - Unhide.sh"
 
 # remove /Roms/Skins because we made it
 rm -r "$SkinsDir"

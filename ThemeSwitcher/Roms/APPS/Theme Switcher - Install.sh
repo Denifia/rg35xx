@@ -11,10 +11,11 @@ AppName="Theme Switcher"
 RomsDir="$(busybox dirname $AppsDir)"
 RootDir="$(busybox dirname $RomsDir)"
 
-$AppsDir/Theme\ Switcher/Skins/.utils/printstr "    Installing...   " & sleep 1
+$AppsDir/Theme\ Switcher/Skins/.utils/printstr "    Installing...    " & sleep 1
 
 # Rename the uninstaller so it shows up in APPS
 mv "$AppsDir/$AppName/.$AppName - Uninstall.sh" "$AppsDir/$AppName - Uninstall.sh"
+mv "$AppsDir/$AppName/$AppName - Hide.sh" "$AppsDir/$AppName - Hide.sh"
 
 cleanup_old_versions() {
   # cleanup from previous versions of Theme Switcher

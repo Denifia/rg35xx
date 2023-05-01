@@ -7,8 +7,7 @@ rootSystemIconsDir="$rootDir/SystemIcons"
 
 # All the output scripts go here
 skinsDir=$(busybox dirname "$0")
-
-$skinsDir/.utils/printstr "    Refreshing...   " & sleep 1
+$skinsDir/.utils/printstr "    Refreshing...    " & sleep 1
 
 # Create the image preview folder if it doesn't exit
 mkdir -p "$skinsDir/Imgs"
@@ -65,8 +64,7 @@ generate_themes() {
 
       # Delete skin, font and lang folders, replace with garlic os defaults
       echo "#!/bin/sh
-
-      $skinsDir/.utils/printstr \"    Switching theme...   \" & sleep 1
+      $skinsDir/.utils/printstr \"    Switching theme...    \" & sleep 1
 
       for folder in skin font lang
       do
@@ -110,9 +108,7 @@ generate_themes() {
     # If the folder has a boot logo, pull it out to it's own script
     if [ -f "$dir/misc/boot_logo.bmp.gz" ]; then
       echo "#!/bin/sh
-
-      $skinsDir/.utils/printstr \"    Switching boot logo...   \" & sleep 1
-
+      $skinsDir/.utils/printstr \"    Switching boot logo...    \" & sleep 1
       mount -o remount,rw /misc
       cp -r \"$rootThemesDir/$themeName/misc/boot_logo.bmp.gz\" \"/misc/boot_logo.bmp.gz\"
       mount -o remount,ro /misc
@@ -149,9 +145,7 @@ generate_bootlogos() {
     # If the folder has a boot logo, pull it out to it's own script
     if [ -f "$dir/misc/boot_logo.bmp.gz" ]; then
       echo "#!/bin/sh
-
-      $skinsDir/.utils/printstr \"    Switching boot logo...   \" & sleep 1
-
+      $skinsDir/.utils/printstr \"    Switching boot logo...    \" & sleep 1
       mount -o remount,rw /misc
       cp -r \"$rootBootLogosDir/$themeName/misc/boot_logo.bmp.gz\" \"/misc/boot_logo.bmp.gz\"
       mount -o remount,ro /misc
@@ -188,10 +182,9 @@ generate_systemicons() {
     # If this folder is actually an icon set, make it into it's own script
     if [ -d "$dir/system" ]; then
       echo "#!/bin/sh
-
-      $skinsDir/.utils/printstr \"    Switching system icons...   \" & sleep 1
-
-      cp -rv \"$rootSystemIconsDir/$themeName/system\" \"/mnt/mmc/CFW/skin\" $rumble" > "$iconsSh"
+      $skinsDir/.utils/printstr \"    Switching system icons...    \" & sleep 1
+      cp -rv \"$rootSystemIconsDir/$themeName/system\" \"/mnt/mmc/CFW/skin\" 
+      $rumble" > "$iconsSh"
 
       # copy the preview if it exists
       if [ -f "$dir/Imgs/$themeName.png" ]; then
@@ -207,7 +200,7 @@ generate_systemicons() {
 add_defaults() {
   echo "#!/bin/sh
 
-$skinsDir/.utils/printstr \"    Resetting theme & icons...   \" & sleep 1
+$skinsDir/.utils/printstr \"    Resetting theme & icons...    \" & sleep 1
 
 for folder in skin font lang
 do
@@ -223,7 +216,7 @@ $rumble" > "$skinsDir/Garlic OS$themeSuffix.sh"
     echo "#!/bin/sh
 # copy in the default files from garlic os
 
-$skinsDir/.utils/printstr \"    Resetting boot logo...   \" & sleep 1
+$skinsDir/.utils/printstr \"    Resetting boot logo...    \" & sleep 1
 
 mount -o remount,rw /misc
 cp -r \"$skinsDir/.garlicos/misc/boot_logo.bmp.gz\" \"/misc/boot_logo.bmp.gz\"
