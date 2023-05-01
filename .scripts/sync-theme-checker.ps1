@@ -1,1 +1,0 @@
-adb push --sync ".\ThemeSwitcher\Roms\APPS\Theme Switcher\Themes\! Check for themes" "/mnt/SDCARD/Roms/Themes/"

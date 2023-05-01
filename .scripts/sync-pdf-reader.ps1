@@ -1,0 +1,1 @@
+adb push --sync ".\PdfReader\Roms\APPS" "/mnt/SDCARD/Roms"

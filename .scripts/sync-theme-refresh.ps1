@@ -1,0 +1,1 @@
+adb push --sync ".\ThemeSwitcher\Roms\APPS\Theme Switcher\Themes\! Refresh" "/mnt/SDCARD/Roms/Themes/"
