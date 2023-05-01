@@ -1,0 +1,1 @@
+adb push --sync ".\PdfReader\Roms\APPS\PDF Reader\Read\! Refresh" "/mnt/SDCARD/Roms/Read/! Refresh"

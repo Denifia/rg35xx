@@ -1,0 +1,58 @@
+#!/bin/sh
+
+rootDir=$(busybox dirname $(busybox dirname $(busybox dirname "$0")))
+pdfDir="$rootDir/PDFs"
+readDir=$(busybox dirname "$0")
+fbpdf="$readDir/.utils/fbpdf"
+
+# find all PDF files in /PDFs and iterate over them
+# todo - while loops aren't working on busybox
+busybox find $pdfDir -name "*.pdf" | while read pdf_file; do
+
+    # extract the filename without extension
+    filename=$(busybox basename "$pdf_file" .pdf)
+
+    # create the new shell script file
+    sh_file="$readDir/$filename.sh"
+
+    echo "#!/bin/sh
+    # launch it
+    ./fbpdf \"$pdf_file\"
+    wait
+    exit" > "$sh_file"
+
+done
+
+# find all PDF files in /Roms/*/Manuals/ and iterate over them
+# todo - while loops aren't working on busybox
+busybox find $pdfDir -path "*/Manuals/*.pdf" | while IFS= read -r pdf_file; do
+
+    # extract the filename without extension
+    filename=$(busybox basename "$pdf_file" .pdf)
+
+    # create the new shell script file
+    sh_file="$readDir/$filename.sh"
+
+    echo "#!/bin/sh
+    # launch it
+    ./fbpdf \"$pdf_file\"
+    wait
+    exit" > "$sh_file"
+
+done
+
+rumble_success() {
+  echo 50 > "/sys/class/power_supply/battery/moto"
+  busybox sleep 0.2
+  echo 0 > "/sys/class/power_supply/battery/moto"
+  busybox sleep 0.1
+  echo 60 > "/sys/class/power_supply/battery/moto"
+  busybox sleep 0.2
+  echo 0 > "/sys/class/power_supply/battery/moto"
+  busybox sleep 0.1
+  echo 70 > "/sys/class/power_supply/battery/moto"
+  busybox sleep 0.2
+  echo 0 > "/sys/class/power_supply/battery/moto"
+}
+
+rumble_success
