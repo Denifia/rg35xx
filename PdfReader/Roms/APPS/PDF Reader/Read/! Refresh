@@ -2,40 +2,48 @@
 
 rootDir=$(busybox dirname $(busybox dirname $(busybox dirname "$0")))
 pdfDir="$rootDir/PDFs"
+romsDir="$rootDir/Roms"
 readDir=$(busybox dirname "$0")
-fbpdf="$readDir/.utils/fbpdf"
+
+# Delete all the existing scripts so we start fresh
+rm "$readDir"/*.sh
 
 # find all PDF files in /PDFs and iterate over them
-# todo - while loops aren't working on busybox
-busybox find $pdfDir -name "*.pdf" | while read pdf_file; do
+busybox find $pdfDir -name "*.pdf" | while read pdf_file
+do
+    # in a sub function, need new variables
+    rootDir=$(busybox dirname $(busybox dirname "$pdf_file"))
 
     # extract the filename without extension
     filename=$(busybox basename "$pdf_file" .pdf)
 
     # create the new shell script file
-    sh_file="$readDir/$filename.sh"
+    sh_file="$rootDir/Roms/Read/$filename.sh"
 
     echo "#!/bin/sh
     # launch it
-    ./fbpdf \"$pdf_file\"
+    $rootDir/Roms/Read/.utils/fbpdf \"$pdf_file\"
     wait
     exit" > "$sh_file"
 
 done
 
 # find all PDF files in /Roms/*/Manuals/ and iterate over them
-# todo - while loops aren't working on busybox
-busybox find $pdfDir -path "*/Manuals/*.pdf" | while IFS= read -r pdf_file; do
+busybox find "$romsDir" -path "*/Manuals/*.pdf" | while read pdf_file
+do
+    # in a sub function, need new variables
+    # ugly but it works :shrug:
+    rootDir=$(busybox dirname $(busybox dirname $(busybox dirname $(busybox dirname "$pdf_file"))))
 
     # extract the filename without extension
     filename=$(busybox basename "$pdf_file" .pdf)
 
     # create the new shell script file
-    sh_file="$readDir/$filename.sh"
+    sh_file="$rootDir/Roms/Read/$filename.sh"
 
     echo "#!/bin/sh
     # launch it
-    ./fbpdf \"$pdf_file\"
+    $rootDir/Roms/Read/.utils/fbpdf \"$pdf_file\"
     wait
     exit" > "$sh_file"
 
