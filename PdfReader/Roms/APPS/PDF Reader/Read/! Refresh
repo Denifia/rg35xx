@@ -5,6 +5,8 @@ pdfDir="$rootDir/PDFs"
 romsDir="$rootDir/Roms"
 readDir=$(busybox dirname "$0")
 
+$readDir/.utils/printstr "    Refreshing...    " & sleep 1
+
 # Delete all the existing scripts so we start fresh
 rm "$readDir"/*.sh
 
