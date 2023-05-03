@@ -1,0 +1,8 @@
+1. Copy everything here into your /Roms/APPS folder on the SDCARD you use to store your roms
+2. Run the "PDF Reader - Install" app on your device
+3. Copy game manuals into /Roms/<console>/Manuals (case sensitive aka capital "M", file extensions must be lowercase ".pdf")
+4. Copy any other pdf you want into /PDFs (file extensions must be lowercase ".pdf")
+4. Run "! Refresh" in your new "Read" tile
+5. Enhance your gaming experience by reading the manuals 🎉
+
+NOTE: If PDFs wont open after you first install the mod, rebooting your device should fix it.
