@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Check if coremappings.json includes '        "Skins": "/bin/sh",'
-if [ -n "$(busybox sed -n '/        "Skins": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]; then
+# Check if coremappings.json includes '    "Skins": "/bin/sh",'
+if [ -n "$(busybox sed -n '/"Skins": "\/bin\/sh",/p' /mnt/mmc/CFW/config/coremapping.json)" ]; then
   # it was there so we remove it
-  busybox sed -i '/        "Skins": "\/bin\/sh",/d' /mnt/mmc/CFW/config/coremapping.json
+  busybox sed -i '/"Skins": "\/bin\/sh",/d' /mnt/mmc/CFW/config/coremapping.json
 fi
 
 AppsDir=$(busybox dirname "$0")
