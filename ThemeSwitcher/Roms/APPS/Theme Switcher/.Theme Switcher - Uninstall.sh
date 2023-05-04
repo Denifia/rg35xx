@@ -15,6 +15,9 @@ $SkinsDir/.utils/printstr "    Uninstalling...    " & sleep 1
 # Delete this uninstaller file
 rm "$AppsDir/$AppName - Uninstall.sh"
 rm "$AppsDir/$AppName - Hide.sh"
+rm "$AppsDir/$AppName - Show.sh"
+
+# Delete files from older versions
 rm "$AppsDir/$AppName - Unhide.sh"
 
 # remove /Roms/Skins because we made it
