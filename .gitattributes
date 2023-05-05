@@ -8,9 +8,9 @@
 
 
 # These files are text and should be normalized (Convert crlf => lf)
-*.json text
-*.txt text
-*.sh text
+*.json text eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
 
 # These files are binary and should be left untouched
 # (binary is a macro for -text -diff)
